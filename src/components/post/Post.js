@@ -1,11 +1,13 @@
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Paper, Box, Typography } from "@mui/material";
+import { Paper, Box, Typography, TextField, Button } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 import { parseISO, format } from "date-fns";
 
 export default function Post() {
   const params = useParams();
   const url = params.url;
+  const navigate = useNavigate();
   const [post, setPost] = useState("");
 
   async function getPost() {
@@ -21,6 +23,10 @@ export default function Post() {
     }
   }
 
+  function edit() {
+    navigate(`/post/${url}/edit`);
+  }
+
   useEffect(() => {
     getPost();
   }, []);
@@ -32,15 +38,20 @@ export default function Post() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "35%",
+            width: "45%",
             padding: "30px",
             gap: "20px",
             margin: "auto",
           }}
         >
-          <Typography variant="h1" sx={{ fontSize: "35px" }}>
-            {post.title}
-          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h1" sx={{ fontSize: "35px" }}>
+              {post.title}
+            </Typography>
+            <Button onClick={edit}>
+              <EditIcon />
+            </Button>
+          </Box>
           <Box sx={{ display: "flex", gap: "15px" }}>
             <Typography variant="body2">{post.user}</Typography>
             <Typography variant="body2">
@@ -55,12 +66,28 @@ export default function Post() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "35%",
+            width: "45%",
             padding: "30px",
             gap: "20px",
-            margin: "auto",
+            margin: "40px auto 0 auto",
           }}
-        ></Paper>
+        >
+          <Typography variant="body2" sx={{ fontSize: "20px" }}>
+            Comments ({post.comments.length})
+          </Typography>
+          <Box component="form">
+            <TextField
+              variant="outlined"
+              multiline
+              label="comment"
+              rows="4"
+              sx={{ width: "100%", fontSize: "5px" }}
+            ></TextField>
+            <Button type="submit" sx={{ marginTop: "15px" }}>
+              Submit
+            </Button>
+          </Box>
+        </Paper>
       </Box>
     );
   }

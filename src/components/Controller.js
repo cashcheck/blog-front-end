@@ -7,6 +7,7 @@ import Login from "./login/Login";
 import AddPost from "./add_post/AddPost";
 import Home from "./home/Home";
 import Post from "./post/Post";
+import EditPost from "./edit_post/EditPost";
 
 const UserContext = React.createContext();
 
@@ -35,6 +36,7 @@ function Controller() {
           <Route path="/login" element={<Login />} />
           <Route path="/addpost" element={<AddPost />} />
           <Route path="/post/:url" element={<Post />} />
+          <Route path="/post/:url/edit" element={<EditPost />} />
         </Routes>
       </UserContext.Provider>
     </div>

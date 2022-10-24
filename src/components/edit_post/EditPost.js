@@ -1,14 +1,25 @@
-import { TextField, Button, Box, Paper, Typography } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  Box,
+  Paper,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Post() {
+export default function EditPost() {
   const token = localStorage.getItem("token");
+  const params = useParams();
+  const initialUrl = params.url;
+
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(true);
 
   function handleTitle(event) {
     setTitle(event.target.value);
@@ -21,6 +32,30 @@ export default function Post() {
   function handleUrl(event) {
     setUrl(event.target.value);
   }
+
+  async function getPost() {
+    try {
+      const rawResponse = await fetch(
+        `http://localhost:5000/post/${initialUrl}`,
+        {
+          method: "GET",
+          mode: "cors",
+        }
+      );
+      const response = await rawResponse.json();
+      const post = response.post;
+      setLoading(false);
+      setTitle(post.title);
+      setContent(post.content);
+      setUrl(post.url);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  useEffect(() => {
+    getPost();
+  }, [loading]);
 
   async function save() {
     try {
@@ -58,6 +93,14 @@ export default function Post() {
     }
   }
 
+  if (loading) {
+    return (
+      <Box>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Paper
       sx={{
@@ -71,7 +114,7 @@ export default function Post() {
         sx={{ display: "flex", flexDirection: "column", gap: "20px" }}
       >
         <Typography variant="h1" sx={{ fontSize: 30 }}>
-          Create Post
+          Edit Post
         </Typography>
         <Box sx={{ display: "flex", gap: "2%" }}>
           <TextField
@@ -79,12 +122,14 @@ export default function Post() {
             variant="outlined"
             onChange={handleTitle}
             sx={{ width: "60%" }}
+            defaultValue={title}
           ></TextField>
           <TextField
             label="URL"
             variant="outlined"
             onChange={handleUrl}
             sx={{ width: "38%" }}
+            defaultValue={url}
           ></TextField>
         </Box>
         <TextField
@@ -92,6 +137,7 @@ export default function Post() {
           multiline
           rows="17"
           onChange={handleContent}
+          defaultValue={content}
         ></TextField>
         <Box sx={{ display: "flex", gap: "20px" }}>
           <Button type="button" onClick={publish}>
