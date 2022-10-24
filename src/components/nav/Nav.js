@@ -1,25 +1,16 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { UserContext } from "../Controller";
 import "./nav.css";
+import NavGuest from "./NavGuest";
+import NavUser from "./NavUser";
 
 function Nav() {
   const user = useContext(UserContext);
 
   if (!user.user) {
-    return (
-      <div className="nav_bar">
-        <Link to="/register">register</Link>
-        <Link to="/login">login</Link>
-        <button onClick={user.logout}>logout</button>
-      </div>
-    );
+    return <NavGuest />;
   } else {
-    return (
-      <div className="nav_bar">
-        <Link to="/protected">protected</Link>
-      </div>
-    );
+    return <NavUser />;
   }
 }
 

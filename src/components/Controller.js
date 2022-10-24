@@ -4,7 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import Nav from "./nav/Nav";
 import Register from "./register/Register";
 import Login from "./login/Login";
-import Protected from "./protected/Protected";
+import AddPost from "./add_post/AddPost";
+import Home from "./home/Home";
+import Post from "./post/Post";
 
 const UserContext = React.createContext();
 
@@ -28,9 +30,11 @@ function Controller() {
       <UserContext.Provider value={{ user, setUser, logout }}>
         <Nav />
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/protected" element={<Protected />} />
+          <Route path="/addpost" element={<AddPost />} />
+          <Route path="/post/:url" element={<Post />} />
         </Routes>
       </UserContext.Provider>
     </div>

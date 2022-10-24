@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Paper, Box, TextField, Button } from "@mui/material";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ export default function Register() {
     setPassword(event.target.value);
   }
 
-  async function registerPost(event) {
+  async function register(event) {
     event.preventDefault();
     const data = { username, password };
     const rawResponse = await fetch("http://localhost:5000/register", {
@@ -28,19 +29,26 @@ export default function Register() {
   }
 
   return (
-    <div>
-      <form onSubmit={registerPost}>
-        <h1>register</h1>
-        <label>username:</label>
-        <input type="text" name="username" onChange={handleUsername}></input>
-        <label>password:</label>
-        <input
-          type="password"
-          name="password"
+    <Paper sx={{ width: "30%", padding: "25px", margin: "100px auto 0 auto" }}>
+      <Box
+        component="form"
+        onSubmit={register}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "25px",
+        }}
+      >
+        <TextField onChange={handleUsername} label="username"></TextField>
+        <TextField
           onChange={handlePassword}
-        ></input>
-        <button type="submit">Register</button>
-      </form>
-    </div>
+          label="password"
+          type="password"
+        ></TextField>
+        <Button type="submit" variant="contained">
+          Register
+        </Button>
+      </Box>
+    </Paper>
   );
 }
