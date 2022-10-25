@@ -4,5 +4,12 @@ export default function Comment(props) {
   const { comment } = props;
   if (comment.comments.length) {
   }
-  return <Paper></Paper>;
+  return (
+    <Box>
+      <Paper>
+        <Typography>{comment.user}</Typography>
+        <Typography>{comment.content}</Typography>
+      </Paper>
+    </Box>
+  );
 }

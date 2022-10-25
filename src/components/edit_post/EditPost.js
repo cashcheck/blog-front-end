@@ -60,8 +60,8 @@ export default function EditPost() {
   async function save() {
     try {
       const data = { title, url, content, publish: false };
-      await fetch("http://localhost:5000/post", {
-        method: "POST",
+      await fetch(`http://localhost:5000/post/${initialUrl}`, {
+        method: "PUT",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
@@ -78,8 +78,8 @@ export default function EditPost() {
   async function publish() {
     try {
       const data = { title, url, content, publish: true };
-      await fetch("http://localhost:5000/post", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/post/${initialUrl}`, {
+        method: "PUT",
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,9 @@ export default function EditPost() {
         },
         body: JSON.stringify(data),
       });
-      navigate("/");
+      const msg = await response.json();
+      console.log(msg);
+      navigate(`/post/${url}`);
     } catch (err) {
       throw err;
     }
